@@ -110,10 +110,11 @@ public class TicTacToeGame extends JComponent
 				Point p = Player.pass;
 				try
 				{
-					p = nextPlayer.move(board.clone(), lastMove);
+					p = nextPlayer.move(board.clone(), lastMove, runLen);
 				}
 				catch (Throwable t)
 				{
+					t.printStackTrace();
 				}
 
 				if (p == Player.pass)

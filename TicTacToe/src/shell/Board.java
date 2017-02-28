@@ -200,6 +200,31 @@ public class Board implements Cloneable, Serializable
 		
 		return new RunInfo(initial, new Point(x, y), key, compressedGaps);
 	}
+	
+	/**
+	 * 
+	 * @param dir This should be a positive number to calculate empty space in the direction of p1,
+	 * and negative to do so in the direction of p2. The actual value has no significance. The direction
+	 * for either sign is the same as the direction that getExtension will work in given the same value.
+	 * 
+	 * @param info This is the particular run whose spatial constraints you want to calculate.
+	 * 
+	 * @return The amount of open squares (determined by isLegal) in the direction described.
+	 *  Null runs or length-1 runs will return 0, as will a direction of 0.
+	 */
+	public int getExtensibleSpace(RunInfo info, int dir)
+	{
+		if(dir == 0)
+			return 0;
+		
+		if(info == null || info.getLength() <= 1)
+			return 0;
+		
+		int k = 0;
+		while(isLegal(info.getExtension((int)Math.signum(dir) * (k + 1))))
+			k++;
+		return k;
+	}
 
 	public byte getTile(Point tile)
 	{

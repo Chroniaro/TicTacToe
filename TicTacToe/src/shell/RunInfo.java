@@ -43,7 +43,7 @@ public class RunInfo
 		@Override
 		public int compare(RunInfo o1, RunInfo o2)
 		{
-			return 2 * (o2.getLength() - o1.getLength()) + o1.getNumberOfGaps() - o2.getNumberOfGaps();
+			return 2 * (o2.getLength() - o1.getLength());
 		}
 	}
 	
@@ -75,5 +75,11 @@ public class RunInfo
 		Point reference = length > 0 ? p1 : p2;
 		
 		return new Point(reference.x + length * dx, reference.y + length * dy);
+	}
+	
+	@Override
+	public String toString()
+	{
+		return "[" + p1 + ", " + p2 + "]";
 	}
 }
