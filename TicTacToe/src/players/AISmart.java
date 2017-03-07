@@ -1,6 +1,7 @@
 package players;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import shell.Board;
 import shell.Player;
 import shell.Point;
@@ -16,19 +17,13 @@ public class AISmart extends Player
 	Point myLastMove = null;
 
 	@Override
-	public boolean needsInput()
-	{
-		return false;
-	}
-
-	@Override
 	public Point getNextMove(Board board, Point lastMove)
 	{
 		if ((lastMove == null || lastMove == pass) && (myLastMove == null || myLastMove == pass))
 			return myLastMove = planNewAttack(board);
 
 		RunInfo a = findStrongestRun(board, getVictorySize(), myLastMove);
-		RunInfo d = findStrongestRun(board, getVictorySize(), lastMove);
+		RunInfo d = findStrongestRun(board, getVictorySize(), myLastMove, lastMove);
 		final boolean aw = isWinnable(board, a, getVictorySize()),
 				dw = isWinnable(board, d, getVictorySize());
 		if(aw && dw)
@@ -43,6 +38,12 @@ public class AISmart extends Player
 			return myLastMove = planNewAttack(board, d.getEnds());
 		else
 			return myLastMove = planNewAttack(board);
+		
+//		myLastMove = findDefense(board, d);
+//		if(myLastMove == null)
+//			return planNewAttack(board, d.getEnds());
+//		else
+//			return myLastMove;
 	}
 
 	static RunInfo findStrongestRun(Board board, int victorySize, Point... locations)
@@ -61,7 +62,7 @@ public class AISmart extends Player
 			else
 				fakes++;
 
-		Arrays.sort(runs, 0, runs.length, new BiasedComparator(board, victorySize));
+		Arrays.sort(runs, 0, runs.length, BiasedComparator.get(board, victorySize));
 
 		for (RunInfo run : runs)
 		{
@@ -129,10 +130,23 @@ public class AISmart extends Player
 
 class BiasedComparator extends RunInfo.sizeComparator
 {
+	private static HashMap<String, BiasedComparator> singletons;
+	
 	private Board board;
 	private int victorySize;
-
-	public BiasedComparator(Board board, int victorySize)
+	
+	public static BiasedComparator get(Board board, int victorySize)
+	{
+		String hash = hashCode(board, victorySize);
+		
+		if(singletons.containsKey(hash))
+			return singletons.get(hash);
+		
+		singletons.put(hash, new BiasedComparator(board, victorySize));
+		return singletons.get(hash);
+	}
+	
+	private BiasedComparator(Board board, int victorySize)
 	{
 		this.board = board;
 		this.victorySize = victorySize;
@@ -146,5 +160,25 @@ class BiasedComparator extends RunInfo.sizeComparator
 		if (o2w ^ o1w)
 			return o2w ? 1 : -1;
 		return super.compare(o1, o2);
+	}
+	
+	@Override
+	public boolean equals(Object arg0)
+	{
+		if(arg0 instanceof BiasedComparator)
+			return ((BiasedComparator)arg0).board == this.board && ((BiasedComparator)arg0).victorySize == this.victorySize;
+		else
+			return false;
+	}
+	
+	@Override
+	public int hashCode()
+	{
+		return hashCode(board, victorySize).hashCode();
+	}
+	
+	private static String hashCode(Board board, int victorySize)
+	{
+		return board.toString() + victorySize;
 	}
 }

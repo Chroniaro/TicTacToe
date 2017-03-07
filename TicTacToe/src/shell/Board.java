@@ -230,6 +230,20 @@ public class Board implements Cloneable, Serializable
 	{
 		return getTile(tile.x, tile.y);
 	}
+	
+	@Override
+	public String toString()
+	{
+		StringBuilder str = new StringBuilder();
+		for(int x = 0; x < getWidth(); x++)
+		{
+			str.append("[");
+			for(int y = 0; y < getHeight(); y++)
+				str.append(getTile(x, y) + ((y < getHeight() - 1) ? ", " : ""));
+			str.append("]");
+		}
+		return str.toString();
+	}
 }
 
 class InvalidBoardException extends Error
