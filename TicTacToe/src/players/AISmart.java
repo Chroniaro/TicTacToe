@@ -19,9 +19,6 @@ public class AISmart extends Player
 	@Override
 	public Point getNextMove(Board board, Point lastMove)
 	{
-		if ((lastMove == null || lastMove == pass) && (myLastMove == null || myLastMove == pass))
-			return myLastMove = planNewAttack(board);
-
 		RunInfo a = findStrongestRun(board, getVictorySize(), myLastMove);
 		RunInfo d = findStrongestRun(board, getVictorySize(), myLastMove, lastMove);
 		final boolean aw = isWinnable(board, a, getVictorySize()),
@@ -38,12 +35,6 @@ public class AISmart extends Player
 			return myLastMove = planNewAttack(board, d.getEnds());
 		else
 			return myLastMove = planNewAttack(board);
-		
-//		myLastMove = findDefense(board, d);
-//		if(myLastMove == null)
-//			return planNewAttack(board, d.getEnds());
-//		else
-//			return myLastMove;
 	}
 
 	static RunInfo findStrongestRun(Board board, int victorySize, Point... locations)
@@ -97,6 +88,9 @@ public class AISmart extends Player
 
 	static Point findDefense(Board board, RunInfo run)
 	{
+		if(run == null)
+			return planNewAttack(board);
+		
 		if (run.getNumberOfGaps() > 0)
 			return run.getGap();
 		
@@ -130,7 +124,7 @@ public class AISmart extends Player
 
 class BiasedComparator extends RunInfo.sizeComparator
 {
-	private static HashMap<String, BiasedComparator> singletons;
+	private static HashMap<String, BiasedComparator> singletons = new HashMap<>();
 	
 	private Board board;
 	private int victorySize;
@@ -179,6 +173,6 @@ class BiasedComparator extends RunInfo.sizeComparator
 	
 	private static String hashCode(Board board, int victorySize)
 	{
-		return board.toString() + victorySize;
+		return board.getId() + "" + victorySize;
 	}
 }

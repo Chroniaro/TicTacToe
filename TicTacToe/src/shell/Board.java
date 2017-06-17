@@ -12,9 +12,12 @@ public class Board implements Cloneable, Serializable
 
 	public static final byte Key_X = 1, Key_O = 2;
 
+	private static int instanceCount = 0;
+	
 	private int width, height;
 	private byte[][] board;
 	private int emptySquares;
+	private int id;
 
 	public Board(int width, int height)
 	{
@@ -22,6 +25,7 @@ public class Board implements Cloneable, Serializable
 		this.height = height;
 		board = new byte[width][height];
 		emptySquares = width * height;
+		id = ++instanceCount;
 	}
 
 	public Board(byte[][] board)
@@ -243,6 +247,11 @@ public class Board implements Cloneable, Serializable
 			str.append("]");
 		}
 		return str.toString();
+	}
+
+	public int getId()
+	{
+		return id;
 	}
 }
 
