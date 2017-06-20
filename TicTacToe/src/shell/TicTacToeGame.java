@@ -50,38 +50,31 @@ public class TicTacToeGame extends JComponent
 		{
 			@Override
 			public void mouseReleased(MouseEvent e)
-			{
-			}
+			{}
 
 			@Override
 			public void mousePressed(MouseEvent e)
-			{
-			}
+			{}
 
 			@Override
 			public void mouseExited(MouseEvent e)
-			{
-			}
+			{}
 
 			@Override
 			public void mouseEntered(MouseEvent e)
-			{
-			}
+			{}
 
 			@Override
 			public void mouseClicked(MouseEvent e)
 			{
-				if (viewMatrix == null)
-					return;
+				if (viewMatrix == null) return;
 
 				java.awt.Point clickLocation = new java.awt.Point();
 				try
 				{
 					viewMatrix.inverseTransform(e.getPoint(), clickLocation);
-					if (clickLocation.x < 0 || clickLocation.y < 0)
-						return;
-					if (clickLocation.x > board.getWidth() * 10 || clickLocation.y > board.getHeight() * 10)
-						return;
+					if (clickLocation.x < 0 || clickLocation.y < 0) return;
+					if (clickLocation.x > board.getWidth() * 10 || clickLocation.y > board.getHeight() * 10) return;
 					clickLocation.x = clickLocation.x / 10;
 					clickLocation.y = clickLocation.y / 10;
 				}
@@ -97,8 +90,7 @@ public class TicTacToeGame extends JComponent
 
 	public void updateGame()
 	{
-		if (board.getEmptySquares() <= 0)
-			playable = false;
+		if (board.getEmptySquares() <= 0) playable = false;
 		else if (playable)
 		{
 			if (getTime() <= 0)
@@ -144,10 +136,8 @@ public class TicTacToeGame extends JComponent
 	{
 		timer = System.currentTimeMillis();
 
-		if (nextPlayer == p1)
-			nextPlayer = p2;
-		else if (nextPlayer == p2)
-			nextPlayer = p1;
+		if (nextPlayer == p1) nextPlayer = p2;
+		else if (nextPlayer == p2) nextPlayer = p1;
 	}
 
 	private void skip()
@@ -162,8 +152,7 @@ public class TicTacToeGame extends JComponent
 		Graphics2D g2d = (Graphics2D) g;
 		AffineTransform initialMatrix = g2d.getTransform();
 
-		double scale = Math.min(getWidth() / (board.getWidth() + 20),
-				getHeight() / (Math.max(board.getHeight(), 14) + 2));
+		double scale = Math.min(getWidth() / (board.getWidth() + 20), getHeight() / (Math.max(board.getHeight(), 14) + 2));
 
 		g2d.translate(getWidth() / 2 - scale * board.getWidth() / 2, getHeight() / 2 - scale * board.getHeight() / 2);
 		g2d.scale(scale / 10, scale / 10);
@@ -195,8 +184,7 @@ public class TicTacToeGame extends JComponent
 				g2d.drawLine(10 * run[0].x + 5, 10 * run[0].y + 5, 10 * run[1].x + 5, 10 * run[1].y + 5);
 				g2d.setColor(new Color(0.f, 1.f, 0.f, .3f));
 				for (int n = 0; n < ri.getNumberOfGaps(); n++)
-					g2d.drawLine(10 * ri.getGap(n).x + 5, 10 * ri.getGap(n).y + 5, 10 * ri.getGap(n).x + 5,
-							10 * ri.getGap(n).y + 5);
+					g2d.drawLine(10 * ri.getGap(n).x + 5, 10 * ri.getGap(n).y + 5, 10 * ri.getGap(n).x + 5, 10 * ri.getGap(n).y + 5);
 
 				for (int e = 1; e <= 3; e++)
 				{
@@ -214,13 +202,12 @@ public class TicTacToeGame extends JComponent
 				g2d.drawLine(10 * run[0].x + 5, 10 * run[0].y + 5, 10 * run[1].x + 5, 10 * run[1].y + 5);
 			}
 		}
-		
+
 		if (vInfo != null)
 		{
 			g2d.setStroke(new BasicStroke(10, BasicStroke.CAP_ROUND, BasicStroke.CAP_ROUND));
 			g2d.setColor(new Color(0.f, 0.f, 1.f, HighlightRuns ? 1f : .3f));
-			g2d.drawLine(vInfo.getEnds()[0].x * 10 + 5, vInfo.getEnds()[0].y * 10 + 5, vInfo.getEnds()[1].x * 10 + 5,
-					vInfo.getEnds()[1].y * 10 + 5);
+			g2d.drawLine(vInfo.getEnds()[0].x * 10 + 5, vInfo.getEnds()[0].y * 10 + 5, vInfo.getEnds()[1].x * 10 + 5, vInfo.getEnds()[1].y * 10 + 5);
 		}
 
 		g2d.setColor(Color.BLACK);
@@ -240,8 +227,7 @@ public class TicTacToeGame extends JComponent
 				}
 			}
 
-		RoundRectangle2D border = new RoundRectangle2D.Double(nextPlayer == p1 ? -98 : board.getWidth() * 10 + 12,
-				5 * board.getHeight() - 55, 86, 130, 10, 10);
+		RoundRectangle2D border = new RoundRectangle2D.Double(nextPlayer == p1 ? -98 : board.getWidth() * 10 + 12, 5 * board.getHeight() - 55, 86, 130, 10, 10);
 		g2d.setColor(Color.red);
 		g2d.fill(border);
 		g2d.setColor(Color.red.darker());
@@ -273,11 +259,8 @@ public class TicTacToeGame extends JComponent
 		g2d.setTransform(preMatrix);
 
 		g2d.setFont(new Font("Comic Sans MS", Font.PLAIN, 20));
-		if (playable)
-			g2d.drawString(TimerFormat.format(getTime()), nextPlayer == p1 ? -87 : board.getWidth() * 10 + 23,
-					5 * board.getHeight() + 50);
-		else if (vInfo != null)
-			g2d.drawString("Winner!", nextPlayer == p1 ? -95 : board.getWidth() * 10 + 15, 5 * board.getHeight() + 50);
+		if (playable) g2d.drawString(TimerFormat.format(getTime()), nextPlayer == p1 ? -87 : board.getWidth() * 10 + 23, 5 * board.getHeight() + 50);
+		else if (vInfo != null) g2d.drawString("Winner!", nextPlayer == p1 ? -95 : board.getWidth() * 10 + 15, 5 * board.getHeight() + 50);
 
 		g2d.setTransform(initialMatrix);
 	}
