@@ -27,7 +27,6 @@ public class TicTacToeGame extends JComponent
 
 	boolean playable = true;
 	Player nextPlayer;
-	AffineTransform viewMatrix;
 	RunInfo vInfo;
 	Point lastMove;
 	long timer = System.currentTimeMillis();
@@ -67,21 +66,18 @@ public class TicTacToeGame extends JComponent
 			@Override
 			public void mouseClicked(MouseEvent e)
 			{
-				if (viewMatrix == null) return;
+				double scale = Math.min(getWidth() / (board.getWidth() + 20), getHeight() / (Math.max(board.getHeight(), 14) + 2));
 
-				java.awt.Point clickLocation = new java.awt.Point();
-				try
-				{
-					viewMatrix.inverseTransform(e.getPoint(), clickLocation);
-					if (clickLocation.x < 0 || clickLocation.y < 0) return;
-					if (clickLocation.x > board.getWidth() * 10 || clickLocation.y > board.getHeight() * 10) return;
-					clickLocation.x = clickLocation.x / 10;
-					clickLocation.y = clickLocation.y / 10;
-				}
-				catch (NoninvertibleTransformException e1)
-				{
-					return;
-				}
+				java.awt.Point clickLocation = new java.awt.Point(e.getPoint());
+
+				clickLocation.x -= getWidth() / 2 - scale * board.getWidth() / 2;
+				clickLocation.y -= getHeight() / 2 - scale * board.getHeight() / 2;
+
+				clickLocation.x /= scale;
+				clickLocation.y /= scale;
+
+				if (clickLocation.x < 0 || clickLocation.y < 0) return;
+				if (clickLocation.x > board.getWidth() || clickLocation.y > board.getHeight()) return;
 
 				nextPlayer.eventClick(new Point(clickLocation));
 			}
@@ -156,8 +152,6 @@ public class TicTacToeGame extends JComponent
 
 		g2d.translate(getWidth() / 2 - scale * board.getWidth() / 2, getHeight() / 2 - scale * board.getHeight() / 2);
 		g2d.scale(scale / 10, scale / 10);
-
-		viewMatrix = g2d.getTransform();
 
 		g2d.setStroke(new BasicStroke(1));
 

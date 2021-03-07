@@ -1,5 +1,6 @@
 package shell;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 public abstract class Player implements Serializable
@@ -7,6 +8,7 @@ public abstract class Player implements Serializable
 	/**
 	 * 
 	 */
+	@Serial
 	private static final long serialVersionUID = -7399124533860674212L;
 
 	final protected static Point pass = new Point(0, 0)

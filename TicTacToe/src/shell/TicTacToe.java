@@ -9,7 +9,7 @@ public class TicTacToe
 	
 	public static void main(String... args) throws Throwable
 	{
-		TicTacToeGame game = new TicTacToeGame(new Board(19, 19), 5, new PlayerHuman(), new AISmart());
+		TicTacToeGame game = new TicTacToeGame(new Board(19, 19), 5, new PlayerHuman(), new AIDefensive());
 		
 		JFrame window = new JFrame();
 		window.setTitle("Tic Tac Toe");
